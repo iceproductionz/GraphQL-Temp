@@ -36,25 +36,6 @@ class GraphQL extends Controller
      */
     public function index(Request $request)
     {
-        $rootMutationType = new ObjectType([
-            'name'   => 'RootMutationType',
-            'fields' => [
-                // defining likePost mutation field
-                'user' => [
-                    // we specify the output type – simple Int, since it doesn't have a structure
-                    'type'    => new UserType(),
-                    // we need a post ID and we set it to be required Int
-                    'args'    => [
-                        'id' => new NonNullType(new IntType())
-                    ],
-                    // simple resolve function that always returns 2
-                    'resolve' => function () {
-                        return 2;
-                    },
-                ]
-            ]
-        ]);
-
         $processor = new Processor(new Schema([
             'query'     => $this->rootType
         ]));

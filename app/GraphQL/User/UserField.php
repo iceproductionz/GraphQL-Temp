@@ -32,10 +32,6 @@ class UserField extends AbstractField
 
     public function resolve($value, array $args, ResolveInfo $info)
     {
-         if (isset($args['id'])) {
-             return $this->users->get($args['id']);
-         }
-
-         return null;
+        return (array)$this->users->get(0);
     }
 }
