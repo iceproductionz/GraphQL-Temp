@@ -3,7 +3,7 @@
 namespace App\GraphQL\Message\Root;
 
 use App\GraphQL\Message\User\UserType;
-use App\GraphQL\User\User;
+use App\GraphQL\User\UserField;
 use Youshido\GraphQL\Config\Object\ObjectTypeConfig;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
@@ -11,11 +11,11 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 class RootType extends AbstractObjectType
 {
     /**
-     * @var User
+     * @var UserField
      */
     private $user;
 
-    public function __construct(User $user)
+    public function __construct(UserField $user)
     {
         parent::__construct([]);
         $this->user = $user;

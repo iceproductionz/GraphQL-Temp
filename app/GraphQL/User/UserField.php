@@ -3,28 +3,23 @@
 namespace App\GraphQL\User;
 
 use App\GraphQL\Message\User\UserType;
-use App\GraphQL\Type\Type;
+use App\Repository\Users;
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Type\AbstractType;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
-class User extends AbstractField
+class UserField extends AbstractField
 {
     /**
-     * @var AbstractType
+     * @var Users
      */
-    private $userType;
+    private $users;
 
-    /**
-     * User constructor.
-     *
-     * @param UserType $userType
-     */
-    public function __construct(UserType $userType)
+    public function __construct(Users $users)
     {
         parent::__construct([]);
-        $this->userType = $userType;
+        $this->users = $users;
     }
 
     /**
@@ -32,6 +27,15 @@ class User extends AbstractField
      */
     public function getType()
     {
-        return $this->userType;
+        return new UserType();
+    }
+
+    public function resolve($value, array $args, ResolveInfo $info)
+    {
+         if (isset($args['id'])) {
+             return $this->users->get($args['id']);
+         }
+
+         return null;
     }
 }

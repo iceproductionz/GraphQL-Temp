@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\GraphQL\Message\Root\RootType;
+use App\GraphQL\Message\User\UserType;
 use Illuminate\Http\Request;
 use Youshido\GraphQL\Execution\Processor;
 use Youshido\GraphQL\Schema\Schema;
+use Youshido\GraphQL\Type\NonNullType;
+use Youshido\GraphQL\Type\Object\ObjectType;
+use Youshido\GraphQL\Type\Scalar\IntType;
 
 class GraphQL extends Controller
 {
@@ -24,13 +28,40 @@ class GraphQL extends Controller
         $this->rootType = $rootType;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return string
+     * @throws \Youshido\GraphQL\Exception\ConfigurationException
+     */
     public function index(Request $request)
     {
+        $rootMutationType = new ObjectType([
+            'name'   => 'RootMutationType',
+            'fields' => [
+                // defining likePost mutation field
+                'user' => [
+                    // we specify the output type – simple Int, since it doesn't have a structure
+                    'type'    => new UserType(),
+                    // we need a post ID and we set it to be required Int
+                    'args'    => [
+                        'id' => new NonNullType(new IntType())
+                    ],
+                    // simple resolve function that always returns 2
+                    'resolve' => function () {
+                        return 2;
+                    },
+                ]
+            ]
+        ]);
+
         $processor = new Processor(new Schema([
-            'query' => $this->rootType
+            'query'     => $this->rootType
         ]));
 
-        $processor->processPayload($request->query);
+        $input = key($request->query->all());
+
+        $processor->processPayload($input);
 
         return json_encode($processor->getResponseData());
     }

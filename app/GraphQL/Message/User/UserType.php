@@ -15,9 +15,10 @@ class UserType extends AbstractObjectType
     public function build($config): void
     {
         $config
-            ->addField('first_name', new StringType())       // defining "title" field of type String
-            ->addField('last_name', new StringType())  // defining "summary" field of type String
-            ->addField('date_of_birth', new DateTimeType());    // defining "summary" field of type String
+            ->addField('first_name', new StringType())
+            ->addField('last_name', new StringType())
+            ->addField('date_of_birth', new DateTimeType());
+
     }
 
     public function getName()
