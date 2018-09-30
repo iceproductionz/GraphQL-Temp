@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Query\User;
 
+use App\Exceptions\NotFound;
 use App\GraphQL\Query\User\UserType;
 use App\Model\User\User;
 use App\Repository\Users;
@@ -50,16 +51,12 @@ class UserField extends AbstractField
      * @return array
      * @throws \Exception
      */
-    public function resolve($value, array $args, ResolveInfo $info)
-    {       $user  = $this->users->get(0);
-
+    public function resolve($value, array $args, ResolveInfo $info): array
+    {
         if (isset($args['id'])  && $args['id'] === 1) {
-
-            $user = new User();
-            $user->date_of_birth = new \DateTimeImmutable();
-            $user->first_name    = 'John';
-            $user->last_name     ='Doe';
+            return (array)$this->users->get($args['id']);
         }
-        return (array)$user;
+
+        throw new NotFound('User not found');
     }
 }

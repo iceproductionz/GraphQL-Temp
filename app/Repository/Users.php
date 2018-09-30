@@ -2,44 +2,39 @@
 
 namespace App\Repository;
 
+use App\Model\User\Collection;
 use App\Model\User\User;
-use Faker\Factory;
+use Iceproductionz\Stream\Csv;
+use Illuminate\Support\Facades\Storage;
+use GrahamCampbell\Flysystem\FlysystemManager;
 
 class Users
 {
-    public function all(): array
+    /**
+     * @var Collection
+     */
+    private $mapCollection;
+
+    /**
+     * Users constructor.
+     *
+     * @param FlysystemManager $flysystemManager
+     */
+    public function __construct(FlysystemManager $flysystemManager)
     {
-        $list = [];
+        $file = $flysystemManager->readStream('users.csv');
 
-        for ($i=0; $i < 10; $i++) {
-
-            $factory = Factory::create();
-
-            $user = new User();
-            $user->date_of_birth = $factory->dateTimeThisCentury;
-            $user->first_name    = $factory->firstName;
-            $user->last_name     = $factory->lastName;
-
-            $list[] =  $user;
-        }
-
-        return $list;
+        $this->mapCollection = new Collection(new Csv($file));
     }
 
     /**
      * @param $id
      *
      * @return User
+     * @throws \Exception
      */
     public function get(int $id): User
     {
-        $factory = Factory::create();
-
-        $user = new User();
-        $user->date_of_birth = $factory->dateTimeThisCentury;
-        $user->first_name    = $factory->firstName;
-        $user->last_name     = $factory->lastName;
-
-        return $user;
+        return $this->mapCollection->findById($id);
     }
 }
