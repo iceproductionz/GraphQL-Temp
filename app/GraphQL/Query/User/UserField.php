@@ -3,6 +3,7 @@
 namespace App\GraphQL\Query\User;
 
 use App\GraphQL\Query\User\UserType;
+use App\Model\User\User;
 use App\Repository\Users;
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -33,13 +34,32 @@ class UserField extends AbstractField
         return new UserType();
     }
 
-    public function build(FieldConfig $config)
+    /**
+     * @param FieldConfig $config
+     */
+    public function build(FieldConfig $config): void
     {
         $config->addArgument('id',  new IntType());
     }
 
+    /**
+     * @param             $value
+     * @param array       $args
+     * @param ResolveInfo $info
+     *
+     * @return array
+     * @throws \Exception
+     */
     public function resolve($value, array $args, ResolveInfo $info)
-    {
-        return (array)$this->users->get(0);
+    {       $user  = $this->users->get(0);
+
+        if (isset($args['id'])  && $args['id'] === 1) {
+
+            $user = new User();
+            $user->date_of_birth = new \DateTimeImmutable();
+            $user->first_name    = 'John';
+            $user->last_name     ='Doe';
+        }
+        return (array)$user;
     }
 }

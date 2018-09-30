@@ -7,7 +7,7 @@ use Faker\Factory;
 
 class Users
 {
-    public function all()
+    public function all(): array
     {
         $list = [];
 
@@ -26,7 +26,12 @@ class Users
         return $list;
     }
 
-    public function get($id): User
+    /**
+     * @param $id
+     *
+     * @return User
+     */
+    public function get(int $id): User
     {
         $factory = Factory::create();
 
