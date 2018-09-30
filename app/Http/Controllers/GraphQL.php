@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\GraphQL\Message\Root\RootType;
-use App\GraphQL\Message\User\UserType;
+use App\GraphQL\Query\Root\RootType;
 use Illuminate\Http\Request;
 use Youshido\GraphQL\Execution\Processor;
 use Youshido\GraphQL\Schema\Schema;
-use Youshido\GraphQL\Type\NonNullType;
-use Youshido\GraphQL\Type\Object\ObjectType;
-use Youshido\GraphQL\Type\Scalar\IntType;
 
 class GraphQL extends Controller
 {
@@ -21,10 +17,11 @@ class GraphQL extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param RootType $rootType
+     * @param RootType         $rootType
      */
     public function __construct(RootType $rootType)
     {
+
         $this->rootType = $rootType;
     }
 
@@ -32,12 +29,11 @@ class GraphQL extends Controller
      * @param Request $request
      *
      * @return string
-     * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    public function index(Request $request)
+    public function index(Request $request): string
     {
         $processor = new Processor(new Schema([
-            'query'     => $this->rootType
+            'query'     => $this->rootType,
         ]));
 
         $input = key($request->query->all());

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\GraphQL\Message\Root;
+namespace App\GraphQL\Query\Root;
 
-use App\GraphQL\Message\User\UserType;
-use App\GraphQL\User\UserField;
+use App\GraphQL\Query\User\UserField;
 use Youshido\GraphQL\Config\Object\ObjectTypeConfig;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
-use Youshido\GraphQL\Type\Scalar\StringType;
 
 class RootType extends AbstractObjectType
 {
